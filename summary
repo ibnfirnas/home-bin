@@ -1,0 +1,9 @@
+#! /usr/bin/env Rscript
+
+Main <- function() {
+  file.name = commandArgs(trailingOnly=TRUE)[1]
+  summary(read.csv(file.name))
+}
+
+
+Main()
