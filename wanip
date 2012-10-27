@@ -1,0 +1,3 @@
+#! /bin/sh
+
+/usr/bin/curl --connect-timeout 8 -s http://www.whatismyip.org/
