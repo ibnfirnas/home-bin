@@ -1,0 +1,15 @@
+#! /bin/sh
+
+
+SEARCH_PATHS="
+    $HOME/Library/LaunchAgents
+    /Library/LaunchAgents
+    /Library/LaunchDaemons
+    /System/Library/LaunchAgents
+    /System/Library/LaunchDaemons
+"
+
+for path in $SEARCH_PATHS;
+do
+    find $path -iname "*$1*"
+done
