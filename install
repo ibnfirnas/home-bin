@@ -1,0 +1,10 @@
+#! /bin/sh
+
+
+mkdir -p ~/bin
+
+
+for item in `ls -1 src/`;
+do
+    ln -s "`pwd`/src/$item" "$HOME/bin/$item"
+done
