@@ -5,5 +5,5 @@ mkdir -p ~/bin
 
 for item in `ls -1 src/`;
 do
-    ln -sfhv "`pwd`/src/$item" "$HOME/bin/$item"
+    ln -sfv "`pwd`/src/$item" "$HOME/bin/$item"
 done
