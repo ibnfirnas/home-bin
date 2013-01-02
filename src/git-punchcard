@@ -1,0 +1,41 @@
+#! /bin/sh
+
+###############################################################################
+#
+# Text version of something like the GitHub's punchcard histogram.
+#
+###############################################################################
+
+
+main() {
+    git log --format=%ad \
+    | awk \
+        '
+        BEGIN \
+        {
+            printf "%s,%s,%s\n", "Weekday", "Hour", "Commits";
+            key_sep = "|";
+        }
+
+        {
+            split($4, time, ":");
+            weekday=$1;
+            hour=time[1];
+
+            commits[weekday key_sep hour]++
+        }
+
+        END \
+        {
+            for (period in commits) {
+                split(period, p, key_sep);
+                weekday = p[1];
+                hour = p[2];
+                printf "%s,%s,%d\n", weekday, hour, commits[period]
+            }
+        }
+        '
+}
+
+
+main
