@@ -1,0 +1,62 @@
+#! /bin/sh
+
+usage() {
+    echo "EXAMPLE: $0 | neato -T png > ps.png && open ps.png"
+}
+
+
+compile() {
+    awk -v uname="$(uname -v)" \
+    '
+        NR > 1 \
+        {
+            parents[$1]=$2;
+            names[$1]=$3
+        }
+
+        END \
+        {
+            print "digraph G {";
+
+            print "start=0;";
+            print "colorscheme=brewer;";
+            print "fontsize=8;";
+            print "fontname=Helvetica;";
+            print "label=\"" uname "\";";
+
+            print "edge [ fontsize=8 \
+                        , fontname=Helvetica \
+                        , len=2.0 \
+                        , color=grey74 \
+                        ]; \
+                    ";
+
+            print "node [ fontsize=8 \
+                        , fontname=Helvetica \
+                        , shape=ellipse \
+                        , color=grey33 \
+                        ]; \
+                    ";
+
+            for (pid in names) {
+                ppid=parents[pid];
+                printf "\"%s\" -> \"%s\" [label=%s];\n", names[pid], names[ppid], pid
+            }
+
+            print "}";
+        }
+    '
+}
+
+
+procs() {
+    ps -eco pid,ppid,comm
+}
+
+
+main() {
+    procs | compile
+}
+
+
+main $1
