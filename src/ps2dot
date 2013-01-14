@@ -40,7 +40,7 @@ compile() {
 
             for (pid in names) {
                 ppid=parents[pid];
-                printf "\"%s\" -> \"%s\" [label=%s];\n", names[pid], names[ppid], pid
+                printf "\"%s\" -> \"%s\" [label=%s];\n", names[ppid], names[pid], pid
             }
 
             print "}";
