@@ -59,7 +59,12 @@ procs() {
 
 
 main() {
-    procs | grep "$1" | compile
+    case "$1" in
+        '--help') usage
+        ;;
+        *) procs | grep "$1" | compile
+        ;;
+    esac
 }
 
 
