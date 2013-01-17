@@ -59,7 +59,7 @@ procs() {
 
 
 main() {
-    procs | compile
+    procs | grep "$1" | compile
 }
 
 
