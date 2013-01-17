@@ -50,7 +50,11 @@ compile() {
 
 
 procs() {
-    ps -eco pid,ppid,comm
+    if [ $(uname) = 'Linux' ]; then
+        ps -eo pid,ppid,comm
+    else
+        ps -eco pid,ppid,comm
+    fi
 }
 
 
