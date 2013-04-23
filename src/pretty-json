@@ -1,0 +1,8 @@
+#! /usr/bin/env python
+
+import json as j
+import sys  as s
+
+
+if __name__ == '__main__':
+    print j.dumps(j.loads(s.stdin.read()), indent=4)
