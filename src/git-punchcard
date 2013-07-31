@@ -1,4 +1,5 @@
 #! /usr/bin/env Rscript
+# vim: filetype=r:
 
 Main <- function() {
   data <- system("git log --format=%ad", intern=TRUE)
