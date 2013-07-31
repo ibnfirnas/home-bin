@@ -1,0 +1,23 @@
+#! /usr/bin/env Rscript
+
+Main <- function() {
+  data <- system("git log --format=%ad", intern=TRUE)
+  data <- as.POSIXct(data, format="%a %b %d %T %Y %z")
+  data <- data.frame( Day  = weekdays(data, abbreviate=TRUE)
+                    , Hour = format(data, "%H")
+                    )
+  data <- as.data.frame(table(data))
+  punchcard <-
+    ( ggplot2::ggplot(data, ggplot2::aes(y=Day, x=Hour))
+    + ggplot2::geom_point(ggplot2::aes(size=Freq))
+    + ggplot2::scale_size(range=c(1, 15))
+    + ggplot2::ylim("Sun", "Sat", "Fri", "Thu", "Wed", "Tue", "Mon")
+    )
+  ggplot2::ggsave( filename = "punchcard.png"
+                 , plot     = punchcard
+                 , width    = 10
+                 , height   = 5
+                 )
+}
+
+Main()
