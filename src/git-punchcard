@@ -13,16 +13,14 @@ ParseDates <- function(lines) {
   days  <- dates[,1]
   times <- dates[,4]
   hours <- matrix(unlist(strsplit(times, ":")), ncol=3, byrow=TRUE)[,1]
-  list( days  = days
-      , hours = hours
-      )
+  data.frame( Day  = days
+            , Hour = hours
+            )
 }
 
 Main <- function() {
   lines <- system("git log --format=%ad", intern=TRUE)
-  dates <- ParseDates(lines)
-  punchcard <- data.frame(Day=dates$days, Hour=dates$hours)
-  punchcard <- as.data.frame(table(punchcard))
+  punchcard <- as.data.frame(table(ParseDates(lines)))
   punchcard <-
     ( ggplot2::ggplot(punchcard, ggplot2::aes(y=Day, x=Hour))
     + ggplot2::geom_point(ggplot2::aes(size=Freq))
