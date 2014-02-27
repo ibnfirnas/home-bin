@@ -1,0 +1,28 @@
+#! /bin/bash
+
+set -e
+
+keys2lines() {
+    python -c "exec(\" \
+        \nimport json as j \
+        \nimport sys  as s \
+        \nfor key in j.loads(s.stdin.read())['keys']: \
+        \n  print key \
+    \")"
+}
+
+main() {
+    declare -r  hostname="$1"
+    declare -r  bucket="$2"
+    declare -ri port=8098
+    declare -r  uri_keys="http://$hostname:$port/buckets/$bucket/index/bucket_bin/$bucket"
+    declare -r  keys=$(curl "$uri_keys" 2> /dev/null | tail -1 | keys2lines)
+    for key in $keys;
+    do
+        uri_object="http://$hostname:$port/riak/$bucket/$key"
+        data=$(curl "$uri_object" 2> /dev/null | tail -1)
+        echo "$data"
+    done
+}
+
+main "$@"
