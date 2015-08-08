@@ -14,9 +14,10 @@ main(_) ->
 
 dump(Socket) ->
     {ok, {_, _, <<Packet/binary>>}} = gen_udp:recv(Socket, 0),
+    Timestamp = timestamp(),
     PacketBase64 = base64:encode(Packet),
     Separator = "|",
-    io:format("~s~s~s~n", [timestamp(), Separator, PacketBase64]),
+    io:format("~s~s~s~n", [Timestamp, Separator, PacketBase64]),
     dump(Socket).
 
 usage() ->
