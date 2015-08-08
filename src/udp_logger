@@ -1,6 +1,10 @@
 #! /usr/bin/env escript
 %%% vim: set filetype=erlang:
 
+main(["-h"|_]) ->
+    usage();
+main(["--help"|_]) ->
+    usage();
 main([PortString|_]) ->
     PortInt = erlang:list_to_integer(PortString),
     {ok, Socket} = gen_udp:open(PortInt, [binary, {active, false}]),
