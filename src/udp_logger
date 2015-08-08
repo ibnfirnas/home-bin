@@ -4,10 +4,15 @@
 main([PortString|_]) ->
     PortInt = erlang:list_to_integer(PortString),
     {ok, Socket} = gen_udp:open(PortInt, [binary, {active, false}]),
-    dump(Socket).
+    dump(Socket);
+main(_) ->
+    usage().
 
 dump(Socket) ->
     {ok, {_, _, <<Packet/binary>>}} = gen_udp:recv(Socket, 0),
     PacketBase64 = base64:encode(Packet),
     io:format("~s~n", [PacketBase64]),
     dump(Socket).
+
+usage() ->
+    io:format("USAGE: udp_logger [port number]~n").
