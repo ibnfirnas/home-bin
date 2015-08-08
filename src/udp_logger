@@ -15,8 +15,27 @@ main(_) ->
 dump(Socket) ->
     {ok, {_, _, <<Packet/binary>>}} = gen_udp:recv(Socket, 0),
     PacketBase64 = base64:encode(Packet),
-    io:format("~s~n", [PacketBase64]),
+    Separator = "|",
+    io:format("~s~s~s~n", [timestamp(), Separator, PacketBase64]),
     dump(Socket).
 
 usage() ->
     io:format("USAGE: udp_logger [port number]~n").
+
+timestamp() ->
+    Timestamp = os:timestamp(),
+    TimestampFloat = erlang_timestamp_to_float(Timestamp),
+    {{Year, Month, Day}, {Hour, Min, Sec}} = calendar:now_to_local_time(Timestamp),
+    SecondsFloat = Sec + (TimestampFloat - trunc(TimestampFloat)),
+    Fmt2Digits = "~2.10.0b",
+    FmtDate = string:join(["~b"      , Fmt2Digits, Fmt2Digits], "-"),
+    FmtTime = string:join([Fmt2Digits, Fmt2Digits, "~9..0f"  ], ":"),
+    Separator = " ",
+    Fmt = FmtDate ++ Separator ++ FmtTime,
+    io_lib:format(Fmt, [Year, Month, Day, Hour, Min, SecondsFloat]).
+
+erlang_timestamp_to_float({ComponentMega, ComponentWhole, ComponentMicro}) ->
+    OneMillion = 1000000,
+    TotalWholeSeconds = ComponentMega * OneMillion + ComponentWhole,
+    TotalMicroSeconds = (TotalWholeSeconds * OneMillion) + ComponentMicro,
+    TotalMicroSeconds / OneMillion.
